@@ -6,7 +6,7 @@ from game.directions import DIRECTIONS, next_cell
 def check_arena(arena, width, height, density):
     assert arena.width == width
     assert arena.height == height
-    assert len(arena.walls) == int(width * height * density)
+    assert len(arena.walls) == round(width * height * density)
 
     for wall in arena.walls:
         assert arena.is_inside(wall)

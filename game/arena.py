@@ -60,7 +60,7 @@ def generate_arena(width, height, density, max_attempts=1000):
             ):
                 list_cells_arena_candidates.append((x,y))
 
-    nb_walls = int(density * width * height)
+    nb_walls = round(width * height * density)
     for _ in range(max_attempts):
         list_walls = sample(list_cells_arena_candidates, k = nb_walls)
         arena = Arena(height=height, width=width, walls=list_walls)
