@@ -1,5 +1,6 @@
 from collections import deque
 from game.directions import DIRECTIONS, next_cell
+from random import sample
 
 class Arena():
     def __init__(self, width, height, walls):
@@ -30,3 +31,40 @@ class Arena():
                     set_visited.add(neighbor_cell)
                     queue.append(neighbor_cell)
         return set_visited
+
+def generate_arena(width, height, density, max_attempts=1000):
+    if (width < 10 or height < 10):
+        raise ValueError("Width and height must be at least 10.")
+
+    if not (0.15 <= density <= 0.25):
+        raise ValueError("Density must be between 15% and 25%")
+
+    start_cell_for_human = (2, height // 2)
+    start_cell_for_ai = (width - 3, height // 2)
+
+    neighbor_cells_for_human = set()
+    neighbor_cells_for_ai = set()
+
+    for directions in DIRECTIONS.values():
+        neighbor_cells_for_human.add(next_cell(start_cell_for_human, directions))
+        neighbor_cells_for_ai.add(next_cell(start_cell_for_ai, directions))
+
+    list_cells_arena_candidates = list()
+    for x in range(width):
+        for y in range(height):
+            if (
+                (x, y) not in neighbor_cells_for_human 
+                and (x, y) not in neighbor_cells_for_ai
+                and (x, y) != start_cell_for_human
+                and (x, y) != start_cell_for_ai
+            ):
+                list_cells_arena_candidates.append((x,y))
+
+    nb_walls = int(density * width * height)
+    for _ in range(max_attempts):
+        list_walls = sample(list_cells_arena_candidates, k = nb_walls)
+        arena = Arena(height=height, width=width, walls=list_walls)
+        if start_cell_for_ai in arena.reachable_cells(start_cell_for_human):
+            return arena
+    raise RuntimeError(f"Failed to generate a valid arena after {max_attempts} attempts.")
+
