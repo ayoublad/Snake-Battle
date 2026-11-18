@@ -1,7 +1,7 @@
 from random import seed
 import pytest
 from game.arena import generate_arena   
-from game.directions import DIRECTIONS, next_cell 
+from game.directions import Direction, next_cell 
 
 def check_arena(arena, width, height, density):
     assert arena.width == width
@@ -17,9 +17,9 @@ def check_arena(arena, width, height, density):
     neighbor_cells_for_human = set()
     neighbor_cells_for_ai = set()
 
-    for directions in DIRECTIONS.values():
-        neighbor_cells_for_human.add(next_cell((2, height // 2), directions))
-        neighbor_cells_for_ai.add(next_cell((width - 3, height // 2), directions))
+    for direction in Direction:
+        neighbor_cells_for_human.add(next_cell((2, height // 2), direction))
+        neighbor_cells_for_ai.add(next_cell((width - 3, height // 2), direction))
 
     for cell_human in neighbor_cells_for_human:
         assert not arena.is_wall(cell_human)

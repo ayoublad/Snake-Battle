@@ -1,5 +1,5 @@
 from collections import deque
-from game.directions import DIRECTIONS, next_cell
+from game.directions import Direction, next_cell
 from random import sample
 
 class Arena():
@@ -22,7 +22,7 @@ class Arena():
         set_visited = set([initial_cell])
         while queue:
             current_cell = queue.popleft()
-            for direction in DIRECTIONS.values():
+            for direction in Direction:
                 neighbor_cell = next_cell(current_cell, direction)
                 if (self.is_inside(neighbor_cell) 
                     and not self.is_wall(neighbor_cell) 
@@ -45,9 +45,9 @@ def generate_arena(width, height, density, max_attempts=1000):
     neighbor_cells_for_human = set()
     neighbor_cells_for_ai = set()
 
-    for directions in DIRECTIONS.values():
-        neighbor_cells_for_human.add(next_cell(start_cell_for_human, directions))
-        neighbor_cells_for_ai.add(next_cell(start_cell_for_ai, directions))
+    for direction in Direction:
+        neighbor_cells_for_human.add(next_cell(start_cell_for_human, direction))
+        neighbor_cells_for_ai.add(next_cell(start_cell_for_ai, direction))
 
     list_cells_arena_candidates = list()
     for x in range(width):

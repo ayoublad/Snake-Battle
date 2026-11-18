@@ -1,6 +1,6 @@
 from collections import deque
 from game.snake import Snake
-from game.directions import DIRECTIONS, next_cell
+from game.directions import Direction, next_cell
 
 def build_abc():
     """Construit le serpent A – B – C de notre exemple : A(0,0), B(1,0), C(2,0), tête en C."""
@@ -53,7 +53,7 @@ def test_length_over_20_turns():
     snake = Snake(start)
     for turn in range(20):
         growth = turn % 5 == 0
-        destination = next_cell(snake.head(), DIRECTIONS["DOWN"])   # calculée depuis la tête
+        destination = next_cell(snake.head(), Direction.DOWN)   # calculée depuis la tête
         snake.move_forward(destination, growth)
 
         expected_length = 2 + turn // 5   # 1 case au départ + croissances aux tours 0, 5, 10…

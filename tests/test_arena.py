@@ -12,7 +12,6 @@ def test_corners_are_inside():
     assert arena.is_inside((4, 0)) 
     assert arena.is_inside((0, 4)) 
     assert arena.is_inside((4, 4))
-    #enleve tous les prints de test pour que le test soit plus propre et plus lisible.
 
 def test_outside_cells():
     arena = build_arena()
