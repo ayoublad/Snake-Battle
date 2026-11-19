@@ -14,7 +14,7 @@ def build_snake(cells):
         snake.move_forward(cell, growth=True)
     return snake
 
-def test_collision_with_own_tail_during_normal_turn():
+def test_entering_own_tail_on_normal_turn_is_valid():
     arena = build_game_arena()
     snake = build_snake([(0, 0), (1, 0), (2, 0), (2, 1), (1, 1), (0, 1)])
     other_snake = build_snake([(4, 4), (4, 3), (3, 3)])
@@ -109,10 +109,10 @@ def test_valid_moves_at_turn_0():
 
 
 def test_validate_move_does_not_modify_snakes():
-    # l'IA appelle validate_move pour tesster ses coups
+    # l'IA appelle validate_move pour tester ses coups
     # la méthode doit seulement lire l'état du jeu, et ne pas modifier les serpents
     arena = build_game_arena()
-    snake = build_snake([(1, 1), (1, 2), (1, 3)])
+    snake = build_snake([(0, 1), (0, 2), (0, 3)])
     other_snake = build_snake([(4, 1), (4, 2), (4, 3)])
     game = Game(arena, snake, other_snake, turn=3)
 
