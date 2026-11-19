@@ -2,14 +2,31 @@ from game.move_result import MoveResult
 from game.directions import next_cell
 
 class Game():
-    def __init__(self, arena, snake_human, snake_ai, turn=0):
+    def __init__(self, arena, snake_human, snake_ai, first_player, turn=0):
         self.arena = arena
         self.snakes = [snake_human, snake_ai]
         self.turn = turn
+        self.first_player = first_player
+        self.current_player = first_player  
 
     def is_growth_turn(self):
         """Retourne True si c'est un tour de croissance, False sinon."""
         return self.turn % 5 == 0
+
+    def apply_move(self, direction):
+        """
+        Applique un déplacement déjà validé.
+
+        Précondition :
+        validate_move(current_player, direction) doit avoir retourné MoveResult.VALID.
+        """
+        current_snake = self.snakes[self.current_player]
+        next_position = next_cell(current_snake.head(), direction=direction)
+        current_snake.move_forward(next_position, self.is_growth_turn())
+
+        self.current_player = 1 - self.current_player # on passe au joueur suivant
+        if self.current_player == self.first_player:
+            self.turn += 1
 
     def validate_move(self, snake_id, direction):
         """Vérifie si le déplacement du serpent vers la destination est valide.

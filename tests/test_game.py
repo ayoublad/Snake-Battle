@@ -18,7 +18,7 @@ def test_entering_own_tail_on_normal_turn_is_valid():
     arena = build_game_arena()
     snake = build_snake([(0, 0), (1, 0), (2, 0), (2, 1), (1, 1), (0, 1)])
     other_snake = build_snake([(4, 4), (4, 3), (3, 3)])
-    game = Game(arena, snake, other_snake, turn=1)
+    game = Game(arena, snake, other_snake, first_player=0, turn=1)
     result = game.validate_move(0, Direction.UP)  
     assert result == MoveResult.VALID
 
@@ -26,7 +26,7 @@ def test_collision_with_own_tail_during_growth_turn():
     arena = build_game_arena()
     snake = build_snake([(0, 0), (1, 0), (2, 0), (2, 1), (1, 1), (0, 1)])
     other_snake = build_snake([(4, 4), (4, 3), (3, 3)])
-    game = Game(arena, snake, other_snake, turn=5)
+    game = Game(arena, snake, other_snake, first_player=0, turn=5)
     result = game.validate_move(0, Direction.UP)  
     assert result == MoveResult.FATAL
 
@@ -34,7 +34,7 @@ def test_collision_with_own_body():
     arena = build_game_arena()
     snake = build_snake([(0, 0), (1, 0), (2, 0), (2, 1), (1, 1)])
     other_snake = build_snake([(4, 4), (4, 3), (3, 3)])
-    game = Game(arena, snake, other_snake, turn=3)
+    game = Game(arena, snake, other_snake, first_player=0, turn=3)
     result = game.validate_move(0, Direction.UP)  
     assert result == MoveResult.FATAL
 
@@ -42,7 +42,7 @@ def test_collision_with_own_neck():
     arena = build_game_arena()
     snake = build_snake([(0, 0), (1, 0), (2, 0)])
     other_snake = build_snake([(4, 4), (4, 3), (3, 3)])
-    game = Game(arena, snake, other_snake, turn=3)
+    game = Game(arena, snake, other_snake, first_player=0, turn=3)
     result = game.validate_move(0, Direction.LEFT)  
     assert result == MoveResult.REFUSED
 
@@ -51,7 +51,7 @@ def test_collision_with_wall():
     arena = build_game_arena()
     snake = build_snake([(2, 0), (2, 1), (2, 2), (2, 3)])
     other_snake = build_snake([(4, 4), (4, 3), (3, 3)])
-    game = Game(arena, snake, other_snake, turn=1)
+    game = Game(arena, snake, other_snake, first_player=0, turn=1)
     result = game.validate_move(0, Direction.DOWN)
     # comme defini au dessus, (2, 4) est un mur
     # donc le résultat attendu est FATAL
@@ -63,7 +63,7 @@ def test_collision_with_outside_arena():
     arena = build_game_arena()
     snake = build_snake([(0, 0), (1, 0), (1, 1), (0, 1)])
     other_snake = build_snake([(4, 4), (4, 3), (3, 3)])
-    game = Game(arena, snake, other_snake, turn=1)
+    game = Game(arena, snake, other_snake, first_player=0, turn=1)
     result = game.validate_move(0, Direction.LEFT)
     # (-1, 1) est en dehors de l'arène
     # donc le résultat attendu est FATAL
@@ -75,7 +75,7 @@ def test_collision_with_other_snake_tail():
     arena = build_game_arena()
     snake = build_snake([(0, 0), (1, 0), (2, 0)])
     other_snake = build_snake([(2, 1), (2, 2), (2, 3)])
-    game = Game(arena, snake, other_snake, turn=3)
+    game = Game(arena, snake, other_snake, first_player=0, turn=3)
     result = game.validate_move(0, Direction.DOWN) 
     # ici on a défini que (2, 1) est la queue de l'autre serpent
     # donc le résultat attendu est FATAL
@@ -90,7 +90,7 @@ def test_collision_with_other_snake_body():
     arena = build_game_arena()
     snake = build_snake([(0, 0), (1, 0), (1, 1), (1, 2)])
     other_snake = build_snake([(2, 1), (2, 2), (2, 3)])
-    game = Game(arena, snake, other_snake, turn=3)
+    game = Game(arena, snake, other_snake, first_player=0, turn=3)
     result = game.validate_move(0, Direction.RIGHT)  
     assert other_snake.is_cell_occupied((2, 2))
     assert result == MoveResult.FATAL
@@ -100,7 +100,7 @@ def test_valid_moves_at_turn_0():
     arena = build_game_arena()
     snake = build_snake([(1, 1)]) # c'est une case stratégique, car elle n'est pas entourée de murs et de l'autre serpent
     other_snake = build_snake([(4, 4)])
-    game = Game(arena, snake, other_snake, turn=0)
+    game = Game(arena, snake, other_snake, first_player=0, turn=0)
     for direction in Direction:
         neighbor_cell = next_cell(snake.head(), direction)
         assert arena.is_inside(neighbor_cell) and not arena.is_wall(neighbor_cell) and not other_snake.is_cell_occupied(neighbor_cell)
@@ -114,7 +114,7 @@ def test_validate_move_does_not_modify_snakes():
     arena = build_game_arena()
     snake = build_snake([(0, 1), (0, 2), (0, 3)])
     other_snake = build_snake([(4, 1), (4, 2), (4, 3)])
-    game = Game(arena, snake, other_snake, turn=3)
+    game = Game(arena, snake, other_snake, first_player=0, turn=3)
 
     snake_before = list(snake.body)
     other_snake_before = list(other_snake.body)
