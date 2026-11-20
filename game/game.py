@@ -7,7 +7,8 @@ class Game():
         self.snakes = [snake_human, snake_ai]
         self.turn = turn
         self.first_player = first_player
-        self.current_player = first_player  
+        self.current_player = first_player 
+        self.winner = None  
 
     def is_growth_turn(self):
         """Retourne True si c'est un tour de croissance, False sinon."""
@@ -52,3 +53,20 @@ class Game():
         if other_snake.is_cell_occupied(next_position):
             return MoveResult.FATAL
         return MoveResult.VALID
+
+    def is_over(self):
+        """Retourne True si la partie est terminée, False sinon."""
+        return self.winner is not None
+
+    def play(self, direction):
+        if self.is_over():
+            raise Exception("La partie est déjà terminée.")
+        
+        result = self.validate_move(snake_id=self.current_player, direction=direction)
+        if result == MoveResult.VALID:
+            self.apply_move(direction=direction)
+
+        if result == MoveResult.FATAL:
+            self.winner = 1 - self.current_player
+
+        return result
