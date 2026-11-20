@@ -166,3 +166,63 @@ def test_apply_move_switches_players_and_updates_turn(first_player, turn, length
     assert len(snake.body) == length_body_snake_expected, f"La longueur du serpent humain devrait être {length_body_snake_expected}, mais elle est {len(snake.body)}"
     assert len(other_snake.body) == length_body_snake_expected, f"La longueur du serpent IA devrait être {length_body_snake_expected}, mais elle est {len(other_snake.body)}"
    
+def test_valid_movement():
+    arena = build_game_arena()
+    snake = build_snake([(0, 1), (0, 2), (0, 3)])
+    other_snake = build_snake([(4, 1), (4, 2), (4, 3)])
+    game = Game(arena, snake, other_snake, first_player=0)
+
+    assert game.current_player == 0, f"Le joueur courant initial devrait être 0, mais il est {game.current_player}"
+
+    result = game.play(Direction.DOWN)
+    assert result == MoveResult.VALID, f"Le mouvement devrait être valide, mais le résultat est {result}"
+
+    assert game.current_player == 1, f"Le joueur courant devrait être 1 après le mouvement, mais il est {game.current_player}"
+    assert not game.is_over(), "La partie ne devrait pas être terminée après un mouvement valide"
+
+def test_refused_movement():
+    arena = build_game_arena()
+    snake = build_snake([(0, 1), (0, 2), (0, 3)])
+    snake_body_before = list(snake.body)
+    other_snake = build_snake([(4, 1), (4, 2), (4, 3)])
+    other_snake_body_before = list(other_snake.body)
+    game = Game(arena, snake, other_snake, first_player=0, turn=3)
+
+    assert game.current_player == 0, f"Le joueur courant initial devrait être 0, mais il est {game.current_player}"
+    assert game.turn == 3, f"Le tour initial devrait être 3, mais il est {game.turn}"
+
+    result = game.play(Direction.UP)  # Le serpent essaie de faire demi-tour
+    assert result == MoveResult.REFUSED, f"Le mouvement devrait être refusé, mais le résultat est {result}"
+    assert game.turn == 3, f"Le tour devrait rester 3 après un mouvement refusé, mais il est {game.turn}"
+
+    assert game.current_player == 0, f"Le joueur courant devrait rester 0 après un mouvement refusé, mais il est {game.current_player}"
+    assert not game.is_over(), "La partie ne devrait pas être terminée après un mouvement refusé"
+
+    assert list(snake.body) == snake_body_before, "Le serpent a bougé après un coup refusé"
+    assert list(other_snake.body) == other_snake_body_before, "L'autre serpent a bougé après un coup refusé"
+
+@pytest.mark.parametrize("first_player", [
+    0, 1
+])
+def test_fatal_movement(first_player):
+    arena = build_game_arena()
+    snake = build_snake([(0, 1), (0, 2), (0, 3)])
+    snake_body_before = list(snake.body)
+    other_snake = build_snake([(3, 2), (3, 3), (3, 4)])
+    other_snake_body_before = list(other_snake.body)
+    game = Game(arena, snake, other_snake, first_player=first_player)
+
+    assert game.current_player == first_player, f"Le joueur courant initial devrait être {first_player}, mais il est {game.current_player}"
+
+    result = game.play(Direction.LEFT)  # Sort de l'arène pour 0, percute un mur pour 1
+    assert result == MoveResult.FATAL, f"Le mouvement devrait être fatal, mais le résultat est {result}"
+
+    assert game.current_player == first_player, f"Le joueur courant devrait rester {first_player} après un mouvement fatal, mais il est {game.current_player}"
+    assert game.is_over(), "La partie devrait être terminée après un mouvement fatal"
+    assert game.winner == 1 - first_player, f"Le joueur {1 - first_player} devrait être le gagnant après un mouvement fatal du joueur {first_player}, mais le gagnant est {game.winner}"
+
+    assert list(snake.body) == snake_body_before, "Le serpent a bougé après un coup fatal"
+    assert list(other_snake.body) == other_snake_body_before, "L'autre serpent a bougé après un coup fatal"
+
+    with pytest.raises(RuntimeError):
+        game.play(Direction.RIGHT)  # Essayer de jouer après la fin de la partie devrait lever une exception

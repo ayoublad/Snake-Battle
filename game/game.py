@@ -59,9 +59,10 @@ class Game():
         return self.winner is not None
 
     def play(self, direction):
+        """Joue un déplacement et met à jour l'état de la partie."""
         if self.is_over():
-            raise Exception("La partie est déjà terminée.")
-        
+            raise RuntimeError("La partie est déjà terminée.")
+
         result = self.validate_move(snake_id=self.current_player, direction=direction)
         if result == MoveResult.VALID:
             self.apply_move(direction=direction)
