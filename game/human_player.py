@@ -12,7 +12,7 @@ class HumanPlayer:
         self.name = name
         self.player_id = player_id
 
-    def choose_direction(self, game):
+    def choose_direction(self):
         while True:
             answer = input(f"Joueur {self.name},\nveuillez choisir une direction (z=haut, s=bas, q=gauche, d=droite) : ")
             if not answer:
