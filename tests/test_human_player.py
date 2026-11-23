@@ -26,12 +26,12 @@ def player():
 ])
 def test_choose_direction_returns_correct_direction(monkeypatch, player, input_value, expected_direction):
     fake_input(monkeypatch, [input_value])
-    assert player.choose_direction() == expected_direction
+    assert player.choose_direction(game=None) == expected_direction
 
 def test_uppercase_and_spaces_are_ignored(monkeypatch, player):
     fake_input(monkeypatch, ["  Z  "])
-    assert player.choose_direction() == Direction.UP
+    assert player.choose_direction(game=None) == Direction.UP
 
 def test_invalid_answer_then_valid_answer(monkeypatch, player):
     fake_input(monkeypatch, ["diagonale", "d"])
-    assert player.choose_direction() == Direction.RIGHT
+    assert player.choose_direction(game=None) == Direction.RIGHT
