@@ -14,7 +14,7 @@ class HumanPlayer:
 
     def choose_direction(self, game):
         while True:
-            answer = input(f"Joueur {self.name},\nveuillez choisir une direction (z=haut, s=bas, q=gauche, d=droite) : ")
+            answer = input(f"Player {self.name},\nPlease choose a direction (z=up, s=down, q=left, d=right) : ")
             if not answer:
                 print("Aucune réponse fournie. Veuillez recommencer.")
                 continue
