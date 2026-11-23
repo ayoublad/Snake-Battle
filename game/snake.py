@@ -18,7 +18,7 @@ class Snake:
     def is_cell_occupied(self, cell):
         return cell in self.body
     
-    def move_forward(self, destination, growth):
+    def move_forward(self, destination, growth: bool):
         if not growth:
             self.body.popleft()
         self.body.append(destination)
