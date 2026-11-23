@@ -1,4 +1,6 @@
-from game.arena import Arena
+import pytest
+
+from game.arena import Arena, start_positions
 
 WALLS = [(3, 0), (3, 1), (3, 2), (4, 2), (0, 3), (1, 3), (1, 4)]
 
@@ -69,3 +71,12 @@ def test_reachable_cells_with_initial_cell_blocked():
         (0, 2), (1, 2), (2, 2), (2, 3), (3, 3), (4, 3), 
         (2, 4), (3, 4), (4, 4)
     }
+@pytest.mark.parametrize("width, height, start_cell_for_human, start_cell_for_ai", [
+    (10, 11, (2, 5), (7, 5)),
+    (20, 10, (2, 5), (17, 5)),
+    (15, 15, (2, 7), (12, 7))
+])
+def test_start_positions(width, height, start_cell_for_human, start_cell_for_ai):
+    human, ai = start_positions(width, height)
+    assert human == start_cell_for_human
+    assert ai == start_cell_for_ai

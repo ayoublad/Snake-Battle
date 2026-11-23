@@ -1,6 +1,6 @@
 from random import seed
 import pytest
-from game.arena import generate_arena   
+from game.arena import generate_arena, start_positions
 from game.directions import Direction, next_cell 
 
 def check_arena(arena, width, height, density):
@@ -11,15 +11,17 @@ def check_arena(arena, width, height, density):
     for wall in arena.walls:
         assert arena.is_inside(wall)
 
-    assert not arena.is_wall((2, height // 2)) 
-    assert not arena.is_wall((width - 3, height // 2))
+    start_cell_for_human, start_cell_for_ai = start_positions(width, height)
+
+    assert not arena.is_wall(start_cell_for_human)
+    assert not arena.is_wall(start_cell_for_ai)
 
     neighbor_cells_for_human = set()
     neighbor_cells_for_ai = set()
 
     for direction in Direction:
-        neighbor_cells_for_human.add(next_cell((2, height // 2), direction))
-        neighbor_cells_for_ai.add(next_cell((width - 3, height // 2), direction))
+        neighbor_cells_for_human.add(next_cell(start_cell_for_human, direction))
+        neighbor_cells_for_ai.add(next_cell(start_cell_for_ai, direction))
 
     for cell_human in neighbor_cells_for_human:
         assert not arena.is_wall(cell_human)
@@ -27,8 +29,8 @@ def check_arena(arena, width, height, density):
     for cell_ai in neighbor_cells_for_ai:
         assert not arena.is_wall(cell_ai)
 
-    set_visited = arena.reachable_cells((2, height // 2))
-    assert (width - 3, height // 2) in set_visited
+    set_visited = arena.reachable_cells(start_cell_for_human)
+    assert start_cell_for_ai in set_visited
 
 @pytest.mark.parametrize("width, height, density", [
     (15, 10, 0.15),
