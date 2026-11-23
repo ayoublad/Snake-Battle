@@ -32,6 +32,11 @@ class Arena():
                     queue.append(neighbor_cell)
         return set_visited
 
+def start_positions(width, height):
+    start_cell_for_human = (2, height // 2)
+    start_cell_for_ai = (width - 3, height // 2)
+    return start_cell_for_human, start_cell_for_ai
+
 def generate_arena(width, height, density, max_attempts=1000):
     if (width < 10 or height < 10):
         raise ValueError("Width and height must be at least 10.")
@@ -39,8 +44,7 @@ def generate_arena(width, height, density, max_attempts=1000):
     if not (0.15 <= density <= 0.25):
         raise ValueError("Density must be between 15% and 25%")
 
-    start_cell_for_human = (2, height // 2)
-    start_cell_for_ai = (width - 3, height // 2)
+    start_cell_for_human,  start_cell_for_ai = start_positions(width, height)
 
     neighbor_cells_for_human = set()
     neighbor_cells_for_ai = set()
@@ -67,4 +71,3 @@ def generate_arena(width, height, density, max_attempts=1000):
         if start_cell_for_ai in arena.reachable_cells(start_cell_for_human):
             return arena
     raise RuntimeError(f"Failed to generate a valid arena after {max_attempts} attempts.")
-
