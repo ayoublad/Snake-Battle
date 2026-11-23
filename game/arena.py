@@ -44,7 +44,7 @@ def generate_arena(width, height, density, max_attempts=1000):
     if not (0.15 <= density <= 0.25):
         raise ValueError("Density must be between 15% and 25%")
 
-    start_cell_for_human,  start_cell_for_ai = start_positions(width, height)
+    start_cell_for_human, start_cell_for_ai = start_positions(width, height)
 
     neighbor_cells_for_human = set()
     neighbor_cells_for_ai = set()
