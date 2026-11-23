@@ -1,5 +1,6 @@
 from game.arena import generate_arena, start_positions
 from game.game import Game
+from game.random_ai_player import RandomAIPlayer
 from game.snake import Snake
 from game.human_player import HumanPlayer
 from game.console_display import ConsoleDisplay
@@ -19,19 +20,19 @@ def main():
     first_player = random.choice([0, 1])
     game = Game(arena=arena, snake_human=snake_human, snake_ai=snake_ai, first_player=first_player)
     name_human = input("Enter your name: ")
-    players = [HumanPlayer(name_human, player_id=0), HumanPlayer("AI", player_id=1)]  # Replace with AIPlayer when implemented
+    players = [HumanPlayer(name_human, player_id=0), RandomAIPlayer("AI", player_id=1)] 
     display = ConsoleDisplay()
-
     while not game.is_over():
-        print(display.render(game))
         current_player = players[game.current_player]
+        print(f"Turn {game.turn} - It's up to {current_player.name} to play.\n")
+        print(display.render(game))
         direction = current_player.choose_direction(game)
         result_move = game.play(direction)
         while result_move == MoveResult.REFUSED:
-            print("demi tour interdit")
+            print("No U-turns")
             direction = current_player.choose_direction(game)
             result_move = game.play(direction)
-        
+        print(f"{current_player.name} played direction: {direction.name}\n")
     print(display.render(game))
     print(f"Game over! Winner: {players[game.winner].name}")
 
