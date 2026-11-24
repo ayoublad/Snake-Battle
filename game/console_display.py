@@ -33,4 +33,4 @@ class ConsoleDisplay():
 
     def show_game_over(self, game, winner):
         print(self.render(game))
-        print(f"Game over! Winner: {winner.name}")
+        print(f"Game over! Winner: {winner.name} in {game.turn}.\n")
