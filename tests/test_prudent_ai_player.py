@@ -1,6 +1,5 @@
 import pytest
 
-from random import seed
 from game.arena import Arena
 from game.prudent_ai_player import PrudentAIPlayer
 from game.directions import Direction
