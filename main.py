@@ -4,7 +4,7 @@ from game.strategic_ai_player import StrategicAIPlayer
 from game.snake import Snake
 from game.human_player import HumanPlayer
 from game.console_display import ConsoleDisplay
-from game.move_result import MoveResult
+from game.play import play_game
 
 import random
 
@@ -22,19 +22,7 @@ def main():
     name_human = input("Enter your name: ")
     players = [HumanPlayer(name_human, player_id=0), StrategicAIPlayer("AI", player_id=1)] 
     display = ConsoleDisplay()
-    while not game.is_over():
-        current_player = players[game.current_player]
-        print(f"Turn {game.turn} - It's up to {current_player.name} to play.\n")
-        print(display.render(game))
-        direction = current_player.choose_direction(game)
-        result_move = game.play(direction)
-        while result_move == MoveResult.REFUSED:
-            print("No U-turns")
-            direction = current_player.choose_direction(game)
-            result_move = game.play(direction)
-        print(f"{current_player.name} played direction: {direction.name}\n")
-    print(display.render(game))
-    print(f"Game over! Winner: {players[game.winner].name}")
+    play_game(game=game, players=players, display=display)
 
 if __name__ == "__main__":
     try:

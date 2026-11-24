@@ -18,4 +18,4 @@ def play_game(game, players, display=None):
     if display is not None:
         print(display.render(game))
         print(f"Game over! Winner: {players[game.winner].name}")
-    return players[game.winner]
+    return game.winner
