@@ -13,7 +13,7 @@ class StrategicAIPlayer:
             move_result = game.validate_move(self.player_id, direction)
             dict_directions_possible[direction] = move_result
 
-        set_cell_blocked = set(set(game.snakes[0].body) | set(game.snakes[1].body))
+        set_cell_blocked = set(game.snakes[0].body) | set(game.snakes[1].body)
         move_valid = [direction for direction, result in dict_directions_possible.items() if result == MoveResult.VALID]
         if move_valid:
             dict_score_each_move = dict()
