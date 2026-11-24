@@ -18,18 +18,16 @@ def play_game(game, players, display=None):
     while not game.is_over():
         current_player = players[game.current_player]
         if display is not None:
-            print(f"Turn {game.turn} - It's up to {current_player.name} to play.\n")
-            print(display.render(game))
+            display.show_turn(game=game, player=current_player)
         direction = current_player.choose_direction(game)
         result_move = game.play(direction)
         while result_move == MoveResult.REFUSED:
             if display is not None:
-                print("No U-turns")
+                display.show_refused(player=current_player)
             direction = current_player.choose_direction(game)
             result_move = game.play(direction)
         if display is not None:
-            print(f"{current_player.name} played direction: {direction.name}\n")
+            display.show_move(player=current_player, direction=direction)
     if display is not None:
-        print(display.render(game))
-        print(f"Game over! Winner: {players[game.winner].name}")
+        display.show_game_over(game=game, winner=players[game.winner].name)
     return game.winner
