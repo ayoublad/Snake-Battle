@@ -1,6 +1,6 @@
 from game.arena import generate_arena, start_positions
 from game.game import Game
-from game.prudent_ai_player import PrudentAIPlayer
+from game.strategic_ai_player import StrategicAIPlayer
 from game.snake import Snake
 from game.human_player import HumanPlayer
 from game.console_display import ConsoleDisplay
@@ -20,7 +20,7 @@ def main():
     first_player = random.choice([0, 1])
     game = Game(arena=arena, snake_human=snake_human, snake_ai=snake_ai, first_player=first_player)
     name_human = input("Enter your name: ")
-    players = [HumanPlayer(name_human, player_id=0), PrudentAIPlayer("AI", player_id=1)] 
+    players = [HumanPlayer(name_human, player_id=0), StrategicAIPlayer("AI", player_id=1)] 
     display = ConsoleDisplay()
     while not game.is_over():
         current_player = players[game.current_player]
