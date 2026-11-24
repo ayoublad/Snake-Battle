@@ -20,3 +20,17 @@ class ConsoleDisplay():
                 ligne += self.cell_symbol(game=game, cell=(x, y))
             lignes.append(ligne)
         return "\n".join(lignes)
+
+    def show_turn(self, game, player):
+        print(self.render(game))
+        print(f"Turn {game.turn} - It's up to {player.name} to play.\n")
+
+    def show_refused(self, player):
+        print(f"Player {player.name} tried to make a u-turn.\n")
+
+    def show_move(self, player, direction):
+        print(f"Player {player.name} played direction: {direction.name}\n")
+
+    def show_game_over(self, game, winner):
+        print(self.render(game))
+        print(f"Game over! Winner: {winner.name}")
