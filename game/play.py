@@ -29,5 +29,5 @@ def play_game(game, players, display=None):
         if display is not None:
             display.show_move(player=current_player, direction=direction)
     if display is not None:
-        display.show_game_over(game=game, winner=players[game.winner].name)
+        display.show_game_over(game=game, winner=players[game.winner])
     return game.winner
