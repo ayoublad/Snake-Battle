@@ -32,3 +32,17 @@ class PygameDisplay:
                 color = self.cell_color(game, cell)
                 pygame.draw.rect(self.screen, color, pygame.Rect(pixel_x, pixel_y, self.size_cell, self.size_cell))
         pygame.display.flip()
+
+    def show_turn(self, game, player):
+        self.draw_arena(game)
+        pygame.display.set_caption(f"Snake Battle - {player.name}'s turn")
+
+    def show_move(self, player, direction):
+        pygame.display.set_caption(f"Snake Battle - {player.name} played direction: {direction.name}")
+
+    def show_refused(self, player):
+        pygame.display.set_caption(f"Snake Battle - {player.name}'s move was refused")
+
+    def show_game_over(self, game, winner):
+        self.draw_arena(game)
+        pygame.display.set_caption(f"Snake Battle - {winner.name} wins!")
