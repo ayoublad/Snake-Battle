@@ -24,13 +24,14 @@ class PygameDisplay:
         return WHITE
 
     def draw_arena(self, game):
+        self.screen.fill(LIGHT_GREY)
         for y in range(0, self.height):
             for x in range(0, self.width):
                 pixel_x = x * self.size_cell
                 pixel_y = y * self.size_cell
                 cell = (x, y)
                 color = self.cell_color(game, cell)
-                pygame.draw.rect(self.screen, color, pygame.Rect(pixel_x, pixel_y, self.size_cell, self.size_cell))
+                pygame.draw.rect(self.screen, color, pygame.Rect(pixel_x, pixel_y, self.size_cell - 1, self.size_cell - 1))
         pygame.display.flip()
 
     def show_turn(self, game, player):
@@ -38,7 +39,7 @@ class PygameDisplay:
         pygame.display.set_caption(f"Snake Battle - {player.name}'s turn")
 
     def show_move(self, player, direction):
-        pygame.time.wait(100)  # Wait for 500 milliseconds to show the move
+        pygame.time.wait(100)  # Wait for 100 milliseconds to show the move
         pygame.display.set_caption(f"Snake Battle - {player.name} played direction: {direction.name}")
 
     def show_refused(self, player):
