@@ -38,6 +38,7 @@ class PygameDisplay:
         pygame.display.set_caption(f"Snake Battle - {player.name}'s turn")
 
     def show_move(self, player, direction):
+        pygame.time.wait(100)  # Wait for 500 milliseconds to show the move
         pygame.display.set_caption(f"Snake Battle - {player.name} played direction: {direction.name}")
 
     def show_refused(self, player):
