@@ -7,7 +7,7 @@ class PygameHumanPlayer:
         self.player_id = player_id
 
     def choose_direction(self, game):
-        print("Please choose a direction (↑=up, ↓=down, ←=left, →=right) : ")
+        #print("Please choose a direction (↑=up, ↓=down, ←=left, →=right) : ")
         clock = pygame.time.Clock()
         while True:
             for event in pygame.event.get():
@@ -24,5 +24,6 @@ class PygameHumanPlayer:
                     elif event.key == pygame.K_RIGHT:
                         return Direction.RIGHT
                     else:
-                        print("Invalid input. Please choose a direction (↑=up, ↓=down, ←=left, →=right) : ")
-            clock.tick(60)  # Limit the frame rate to 60 FPS
+                        #print("Invalid input. Please choose a direction (↑=up, ↓=down, ←=left, →=right) : ")
+                        pass
+            clock.tick(30)  # Limit the frame rate to 30 FPS

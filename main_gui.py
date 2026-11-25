@@ -26,7 +26,7 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
         
-        clock.tick(60) #Limit the frame rate to 60 FPS
+        clock.tick(30) #Limit the frame rate to 30 FPS
     pygame.quit()
 
 if __name__ == "__main__":
