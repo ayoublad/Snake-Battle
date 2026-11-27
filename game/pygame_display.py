@@ -1,5 +1,6 @@
 import pygame
 from assets.colors import *
+from game.directions import Direction
 
 class PygameDisplay:
     def __init__(self, width, height, size_cell=40):
@@ -35,6 +36,7 @@ class PygameDisplay:
 
     def draw_arena(self, game):
         self.screen.fill(LIGHT_GREY)
+        head_colors = {0: LIGHT_GREEN, 1: LIGHT_RED}
         for y in range(0, self.height):
             for x in range(0, self.width):
                 pixel_x = x * self.size_cell
@@ -42,6 +44,41 @@ class PygameDisplay:
                 cell = (x, y)
                 color = self.cell_color(game, cell)
                 pygame.draw.rect(self.screen, color, pygame.Rect(pixel_x, pixel_y, self.size_cell - 1, self.size_cell - 1))
+        for snake_index, head_color in head_colors.items():
+            cell = game.snakes[snake_index].head()
+            pixel_x = cell[0] * self.size_cell
+            pixel_y = cell[1] * self.size_cell
+            direction = self.head_direction(game, snake_index)
+            triangle = self.head_triangle(cell, direction)
+            pygame.draw.rect(self.screen, WHITE, pygame.Rect(pixel_x, pixel_y, self.size_cell - 1, self.size_cell - 1))
+            pygame.draw.polygon(self.screen, head_color, triangle)
+    
+    def head_direction(self, game, snake_index):
+        head = game.snakes[snake_index].head()
+        neck = game.snakes[snake_index].neck()
+        if neck is not None:
+            dx = head[0] - neck[0]
+            dy = head[1] - neck[1]
+            return Direction((dx, dy))  # Return the direction based on the difference between head and neck
+        else:
+            if snake_index == 0:
+                return Direction.RIGHT  
+            elif snake_index == 1:
+                return Direction.LEFT 
+
+    def head_triangle(self, cell, direction):
+        #possible optimization:  try using the regularity of the array to avoid having to copy and paste almost identical formulas four times
+        px = self.size_cell * cell[0]
+        py = self.size_cell * cell[1]
+        size = self.size_cell - 1
+        if direction == Direction.UP:
+            return [(px + size // 2, py), (px, py + size), (px + size, py + size)]
+        elif direction == Direction.DOWN:
+            return [(px + size // 2, py + size), (px, py), (px + size, py)]
+        elif direction == Direction.LEFT:
+            return [(px, py + size // 2), (px + size, py), (px + size, py + size)]
+        elif direction == Direction.RIGHT:
+            return [(px + size, py + size // 2), (px, py), (px, py + size)]
 
     def show_turn(self, game, player):
         self.draw_arena(game)
